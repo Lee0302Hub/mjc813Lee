@@ -2,6 +2,8 @@
 //let 1age = 4;
 //let 1age = 4;
 
+import readline from "readline";
+
 class Exam0414 {
     makeLotto() {
         // 난수로 6개의 숫자를 발행하되, 중복 안됨, 오름차순 정렬
@@ -51,9 +53,17 @@ class Exam0414 {
     }
 
     pdfExam10() {
-        let i;
+        let i ;
         for(i = 0; i < 5; i++) {
+            process.stdout.write(" ");
+            if(i === 3) {
+                process.stdout.write("*");
+            }
+        }
+        for(i = 0; i < 5; i++) {
+            if(i & 2 == 0) {
 
+            }
         }
      }
 
@@ -87,10 +97,54 @@ class Exam0414 {
 
     pdfExam18() {
 
-
     }
+
+}
+class Exam25 {
+maps = new Map();
+
+inputFunc() {
+    let names = prompt("이름을 공백으로 구분하여 입력하세요.");
+    let score = prompt("점수를 공백으로 구분하여 입력하세요.");
+    let arrName = names.split(" ");
+    let arrScore = score.split(" ");
+
+    if (arrName.length != arrScore.length) {
+        alert("두개 배열의 길이가 다릅니다. 다시 시작하세요.");
+        return false;   // 함수가 false 를 리턴한다.
+    }
+    this.maps.set(arrName[0], Number(arrScore[0])); // Number 는 문자열을 숫자로 변경
+    this.maps.set(arrName[1], Number(arrScore[1]));
+    console.log(this.maps);
+    return true;    // 함수가 true 를 리턴한다.
+}
+
+outputFunc() {
+    let strOutput = "{";
+    for( let item of this.maps ) {
+        console.log(item);
+        strOutput += `'${item[0]}': ${item[1]}, `
+    }
+    strOutput = strOutput.substring(0 , strOutput.length - 2);
+    // 문자열의 길이에서 -2 시킨 길이의 문자열로 다시 저장. "abcd" => "ab"
+    strOutput += "}";
+    console.log(strOutput);
+}
+}
+
+let exam = new Exam27();
+if ( exam.inputFunc() ) {   // inputFunc() 를 실행하고 리턴값이 true 이면
+    exam.outputFunc();  // outputFunc() 를 실행한다.
+}
+
+class Exam41 {
+    const r1 = readline.createInterface({
+        input: process.stdin();
+    });
+
 }
 
 let exam0414 = new Exam0414();
 exam0414.makeLotto();
-exam0414.pdfExam17();
+//exam0414.pdfExam17();
+exam0414.pdfExam10();
