@@ -1,0 +1,53 @@
+.modal {
+    width: 400px;
+    height: 200px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    position: relative;
+}
+
+.modal[open] {
+    -webkit-animation: show 0.5s ease normal;
+}
+
+.modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal[open]::backdrop {
+    -webkit-animation: show-backdrop 0.5s ease normal;
+}
+
+.modal > h3 {
+    width: 100%;
+    height: 30px;
+    border-bottom: 1px solid #333;
+}
+
+.modal > form > button {
+    background-color: cornflowerblue;
+    color: #fff;
+    border: none;
+    padding: 5px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+@keyframes show {
+    from {
+        transform: translateY(-200%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes show-backdrop {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

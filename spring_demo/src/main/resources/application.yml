@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: spring_demo
+  datasource:
+    url: jdbc:mysql://localhost:3306/sptringboot_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: spring_user
+    password: spring_4321@
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+
+  mustache:
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+    charset: UTF-8
+    servlet:
+      cache: false
+
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: com.spacrud.spring_demo
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  port: 8086
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+

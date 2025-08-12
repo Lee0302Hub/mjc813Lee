@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>수영장 정보 목록</title>
+    <link href="/customcss/css/styles.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+
+        .modal{
+            position:fixed; width:100%; height:100%; background: rgba(0,0,0,0.8); display:none;
+        }
+
+        .modal_content{
+            width: 400px; height: auto;
+            background:#fff; border-radius:10px;
+            position:relative; top:30%; left:50%;
+            margin-top:-100px; margin-left:-200px;
+            text-align:center;
+            box-sizing:border-box; padding:74px 0;
+            line-height:23px; cursor:pointer;
+        }
+
+        #close{
+          display: inline-block; align-items: center;
+        }
+    </style>
+    <script>
+    $(document).ready(function(){
+        $.loadData();
+
+        $('#open').click(function(){
+            $('.modal').fadeIn();
+            $('.modal_content').fadeIn();
+        });
+
+        $('#close').click(function(){
+            $('.modal').fadeOut();
+            $('.modal_content').fadeOut();
+        });
+
+    });
+
+    $.loadData = () =>{
+        $.list();
+    }
+
+    $.update = function(id) {
+        let body = {name: $('#inName').val(),
+            lanes: $('#inLanes').val(),
+            lanesType: $('#inLanesType').val(),
+            phoneNumber: $('#inPhoneNum').val(),
+            addr: $('#inAddr').val()
+        }
+        $.ajax({
+            url: 'api/v1/swimpool/' + id,
+            type: 'patch',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(body)
+        }).done(function(result, textStatus, xhr){
+            console.log("Success: ", textStatus);
+            console.log("type: ", xhr.responseJSON.result);
+            console.log("JSON Log: ", result);
+            alert("수정완료");
+            $.list();
+        }).fail(function(xhr, textStatus, error){
+            console.log("Error : ", textStatus);
+            console.log("Error Content: ", error);
+        });
+    }
+
+    $.delete = function(id) {
+        $.ajax({
+            url: 'api/v1/swimpool/' + id,
+            method: 'delete'
+        }).done(function(result, textStatus, xhr){
+            console.log("Success: ", textStatus);
+            alert("삭제완료");
+            $.list();
+        }).fail(function(xhr, textStatus, error){
+            console.log(textStatus);
+            console.log(xhr.ResponseJSON.result);
+            alert("에러발생 : " + textStatus);
+        });
+    }
+
+    $.insert = function() {
+
+        $.ajax({
+            url: 'api/v1/swimpool',
+            type: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(
+                {name: $('#inName').val(),
+                lanes: $('#inLanes').val(),
+                lanesType: $('#inLanesType').val(),
+                phoneNumber: $('#inPhoneNum').val(),
+                addr: $('#inAddr').val()
+                }
+            )
+        }).done(function(result, textStatus, xhr){
+            console.log(`Success :  ${result}`);
+            alert("등록완료");
+            $('#close').trigger('click');
+            $.list();
+        }).fail(function(xhr, textStatus, error){
+            console.log("Status : ", textStatus);
+            console.log("JSON: ", xhr.responseJSON.result);
+            alert("에러발생");
+        });
+    }
+
+    $.list = function() {
+        $.ajax({
+            url: 'api/v1/swimpool/list',
+            method: 'GET'
+        }).done(function(result, textStatus, jhr){
+            console.log("Success", result);
+            console.log("JSON Result: ", jhr.responseText);
+            $.printlist(result.resultData);
+        }).fail(function(xhr, textStatus, error){
+            console.log("Fail", textStatus, error);
+            console.log("JSON Result: ", xhr.responseText);
+            alert(`${xhr.responseJSON.result} : ${xhr.responseJSON.resultData.message}`);
+        });
+    }
+
+    $.modify = function(id, item) {
+       let addHtml = `\
+        <div class="col-md-4 mb-5">\
+            <div class="card h-100">\
+                <div class="card-body">\
+                    <div><label for="inName">이름: </label><input type="text" id="inName" name="name" maxlength="20" value="${item.name}"></div><br>\
+                    <div><label for="inLanes">라인 수: </label><input type="number" id="inLanes" name="lanes" value="${item.lanes}"></div><br>\
+                    <div><label for="inLanesType">라인 길이: </label><select id="inLanesType" name="lanes" value="${item.lanesType}">\
+                    <option value="25M">25M</option>\
+                    <option value="50M">50M</option>\
+                    </select></div><br>\
+                    <div><label for="inPhoneNum">전화번호: </label><input type="text" id="inPhoneNum" name="phoneNumber" value="${item.phoneNumber}"></div><br>\
+                    <div><label for="inAddr">주소: </label><input type="text" id="inAddr" name="addr" maxlength="100" value="${item.addr}"></div><br>\
+                </div>\
+                <button onclick="$.list()">이전으로</button>\
+                <button onclick="$.update(${id})">수정</button>\
+            </div>\
+        </div>`;
+       $('#list').html(addHtml);
+    }
+
+
+    $.printlist = (list) => {
+        let strHtml="";
+        for(let i = 0; i < list.length; i++) {
+            strHtml += $.listRows(list[i]);
+        }
+        $("#list").empty();
+        $("#list").append(strHtml);
+    }
+
+    $.listRows = (item) => {
+        return `\
+        <div class="col-md-4 mb-5">\
+            <div class="card h-100">\
+                <div class="card-body">\
+                    <div>이름 : ${item.name}</div>\
+                    <div>전화 : ${item.phoneNumber}</div>\
+                    <div>형태 : ${item.lanesType}</div>\
+                    <div>개수 : ${item.lanes}</div>\
+                </div>\
+                <button onclick="$.delete(${item.id})">삭제</button>\
+                <button onclick='$.modify(${item.id}, ${JSON.stringify(item)})'>수정</button>\
+            </div>\
+        </div>`;
+    }
+
+    </script>
+</head>
+<body>
+<div class="container px-4 px-lg-5">
+    <div class="card text-white bg-secondary my-5 py-4 text-center">
+        <div class="card-body"><p class="text-white m-0">수영자 정보 목록</p></div>
+    </div>
+
+    <div id="list" class="row gx-4 gx-lg-5">
+    </div>
+
+</div>
+<button id="open">삽입</button>
+<div class="modal">
+    <div class="modal_content">
+        <h2>수영자 입력</h2>
+        <div><label for="inName">이름: </label><input type="text" id="inName" name="name" maxlength="20"></div><br>
+        <div><label for="inLanes">라인 수: </label><input type="number" id="inLanes" name="lanes"></div><br>
+        <div><label for="inLanesType">라인 길이: </label><select id="inLanesType" name="lanes">
+            <option value="25M">25M</option>
+            <option value="50M">50M</option>
+        </select></div><br>
+        <div><label for="inPhoneNum">전화번호: </label><input type="text" id="inPhoneNum" name="phoneNumber"></div><br>
+        <div><label for="inAddr">주소: </label><input type="text" id="inAddr" name="addr" maxlength="100"></div><br>
+        <button type="submit" onclick="$.insert();">제출</button>
+        <button id="close">닫기</button>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>목록</title>
+</head>
+<body>
+<h2>현재 목록</h2>
+<hr>
+{{#list}}
+<div class="info">
+    <span>아이디 : {{id}}</span>
+    <span>이름 : {{name}}</span>
+    <span>전화번호 : {{phoneNumber}}</span>
+    <span>우편번호 : {{zipNumber}}</span>
+    <span>이메일 : {{email}}</span>
+</div>
+{{/list}}
+<br>
+<div><button onClick="nextBtn();">다음</button></div>
+<div><button onClick="prevBtn();">이전</button></div>
+<script>
+    function nextBtn () {
+        let url ='/spInf/select?cntPage=2&curPage=' + ({{curPage}} + 1);
+        document.location.href = url;
+    }
+    function prevBtn() {
+        let url = '/spInf/select?cntPage=2&curPage=' + ({{curPage}}-1);
+        document.location.href = url;
+    }
+</script>
+<hr>
+<h2>등록</h2>
+<form method="POST" action="/spInf/insert">
+    <label>이름 : <input type="text" name="name"></label>
+    <label>전화번호 : <input type="text" name="phoneNumber"></label>
+    <label>우편번호 : <input type="text" name="zipNumber"></label>
+    <label>이메일 : <input type="text" name="email"></label>
+    <button type="submit">등록</button>
+</form>
+<br>
+<hr>
+<h2>삭제</h2>
+<form method="GET" action="/spInf/delete">
+    <label>삭제번호 : <input type="number" name="id"></label>
+    <button type="submit">삭제</button>
+</form>
+<br>
+<hr>
+<h2>수정</h2>
+<form method="GET"  action="/spInf/update">
+    <label>수정번호 : <input type="number" name="id"></label>
+    <label><select name="col">
+        <option value="name">이름</option>
+        <option value="phone_number">전화번호</option>
+        <option value="zip_number">우편번호</option>
+        <option value="email">이메일</option>
+    </select></label>
+    <label>수정 : <input type="text" name="modify"></label>
+    <button type="submit">수정하기</button>
+</form>
+
+</body>
+</html>

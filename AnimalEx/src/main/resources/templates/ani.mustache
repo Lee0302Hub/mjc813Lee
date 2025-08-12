@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>동물</title>
+    </head>
+    <body>
+    <h2>동물 리스트</h2>
+    <hr>
+    {{#allSel}}
+        <div>
+            <span>아이디 : {{id}}</span>
+            <span>이름 : {{name}}</span>
+            <span>나이 : {{age}}</span>
+            <span>종류 : {{kind}}</span>
+        </div>
+    {{/allSel}}
+    <hr>
+    <div>
+        <a href="/ins">등록하기</a>
+    </div>
+    <hr>
+    <div>
+        <form method="GET" action="/sel">
+            <label>검색할 아이디 : <input type="number" name="id"></label>
+            <input type="submit">
+        </form>
+    </div>
+    <hr>
+    <div>
+        <a href="/del">삭제하기</a>
+    </div>
+    </body>
+    </html>

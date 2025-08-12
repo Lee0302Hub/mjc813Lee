@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="Test.js"></script>
+</head>
+<body>
+<form action="/TestServlet" method = "post">
+    <label>First name: <input type="text" name="fName" id="fName"></label>
+    <label>Second name : <input type="text" name="sName" id="sName"></label>
+    <input type="submit" name="result" id="Nresult">
+</form>
+
+</body>
+<script>
+    let nameObject = document.getElementById("fName");
+    nameObject.value = "성을 입력하세요";
+
+    let labelName = document.querySelector("#sName");
+    labelName.value = "이름을 입력하세요";
+
+//    alert(document.querySelector("#sName").value);
+
+
+</script>
+</html>

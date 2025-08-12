@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.examplecoop.springexam.Repository.IContactMapper">
+    <insert id="inData" parameterType="ContactDTO" useGeneratedKeys="true" keyProperty="id">
+        insert into Contact_tbl(name, phone_number, zip_number, email)
+        values(#{name}, #{phoneNumber}, #{zipNumber}, #{email})
+    </insert>
+    <select id="selData" resultType="ContactDTO" parameterType="searchDTO">
+         select id, name, phone_number, zip_number, email from Contact_tbl order by id
+         limit #{cntPage} offset #{offPage}
+    </select>
+    <delete id="delData" parameterType="ContactDTO">
+        delete from Contact_tbl where id=#{id}
+    </delete>
+    <update id="upData" parameterType="ContactDTO">
+        update Contact_tbl set ${col} = #{modify} where id=#{id}
+    </update>
+</mapper>

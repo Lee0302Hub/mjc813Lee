@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="/css/modalCss.css" rel="stylesheet">
+    <style>
+        .btn-Container{
+            position: fixed;
+        }
+        .btn-Container > Button{
+            font-weight: bold;
+            color: blue;
+        }
+        fieldset > label > input {
+            width:100%;
+        }
+    </style>
+    <script>
+        $(document).ready(function(){
+            $.list();
+            $('#open').click(function(){
+                $('.modal')
+                    .fadeIn(150)
+                    .addClass('show');
+                $('.modal-content').fadeIn();
+            });
+            $('.close').click(function(){
+                $('.modal').fadeOut(150).removeClass('show');
+                $('.modal-content').fadeOut();
+            })
+        });
+
+        $.insert = function() {
+            let inBody = {
+                "name": $('#inName').val(),
+                "playTime": $('#inTime').val(),
+                "casts": $('#inCast').val(),
+                "description": $('#inDes').val(),
+                "restrictAge": $('#inAge').val()
+            };
+
+            $.ajax({
+                url: "/api/cinema/insert/" + $('#inGenre').val(),
+                type: "post",
+                data: JSON.stringify(inBody),
+                dataType: "JSON",
+                contentType: 'application/json'
+            }).done(function (data) {
+                console.log("Success", data.data)
+                $.list();
+                $('#closeBtn').click();
+            }).fail(function (xhr, textStatus, errorMsg) {
+                console.log("ERROR: ", textStatus, errorMsg);
+
+            });
+
+        }
+        $.list = function() {
+
+        }
+    </script>
+
+</head>
+<body>
+<h2>영화</h2>
+<hr>
+<table border="1" style="text-align: center;">
+    <th>영화이름</th><th>장르</th><th>영화길이</th><th>CAST</th><th>설명</th><th>적정나이</th>
+    <div id="list"></div>
+</table>
+<div class="modal">
+    <div class="modal-content">
+        <div>
+            <h2 style="text-align: center">영화 삽입</h2>
+            <hr>
+            <fieldset style="text-align: center">
+                <label>영화 이름<br><input type="text" for="inName" id="inName" name="name"></label>
+                <label><br>영화 장르<br><input type="text" for="inGenre" id="inGenre" name="genre"></label>
+                <label><br>영화 길이<br><input type="text" for="inTime" id="inTime" name="playTime" maxlength="10"></label>
+                <label><br>영화 Cast<br><input type="text" for="inCast" id="inCast" name="casts"></label>
+                <label><br>설명<br><input type="text" for="inDes" id="inDes" name="description"></label>
+                <label><br>적정나이<br><input type="number" for="inAge" id="inAge" name="restrictAge"></label>
+                <br><button type="submit" onclick="$.insert()">완료</button>
+            </fieldset>
+        </div>
+        <button id="closeBtn" class="close">닫기</button>
+    </div>
+</div>
+<div class="btn-Container"><button id="open">삽입</button></div>
+</body>
+</html>
